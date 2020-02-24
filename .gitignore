@@ -22,5 +22,5 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-/src/assets/fonts
-/src/assets/images
+/src/assets/fonts/*
+/src/assets/images/*
