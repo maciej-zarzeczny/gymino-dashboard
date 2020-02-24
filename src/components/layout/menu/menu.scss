@@ -1,0 +1,46 @@
+@import '../../../assets/styles/_variables';
+@import '../../../assets/styles/_mixins';
+
+.logo {
+    width: 150px;
+    height: auto;               
+}
+
+.sidenav {
+    background-color: $primary-color !important;    
+}
+
+.sidenav *:not(.title) {
+    color: white;
+}
+
+.sidenav a {
+    @include fontSize(16px);
+}
+
+.sidenav li:nth-child(2) {
+    margin-top: 3rem;
+}
+
+.sidenav-link {
+    padding: 0 20px 0 20px;
+    margin: 0 !important;
+}
+
+.sidenav-title {
+    padding: 0 25px 0 25px;
+}
+
+.title {
+    color: $dark-grey;
+    font-weight: bold;
+}
+
+.divider {
+    margin-left: 25px !important;
+    margin-right: 25px !important;    
+}
+
+.active-link {
+    font-weight: bold;
+}

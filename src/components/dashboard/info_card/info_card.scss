@@ -1,0 +1,37 @@
+@import '../../../assets/styles/variables';
+@import '../../../assets/styles/mixins';
+
+.info-card {    
+  border-radius: 5px !important;
+}
+
+.decoration {
+    position: relative;
+    top: 10px;
+    left: 0;
+    right: 0;
+    height: 4px;
+    border-radius: 5px 5px 0 0;
+}
+
+.card-content {
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+.card-title {
+    @include fontSize(13px);
+    text-transform: uppercase;        
+    font-weight: bold;
+}
+
+.card-data {
+    @include fontSize(25px);
+    color: $primary-color;
+    font-weight: bold;
+}
+
+.card-icon {
+    @include fontSize(45px);
+    color: $grey;        
+}

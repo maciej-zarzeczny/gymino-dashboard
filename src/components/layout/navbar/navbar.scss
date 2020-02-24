@@ -1,0 +1,17 @@
+@import '../../../assets/styles/variables';
+
+.avatar {
+    max-width: 50px;
+    height: auto;    
+    vertical-align: middle;
+}
+
+.username {
+    color: $primary-color;
+    padding-right: 10px;
+    font-size: large;    
+}
+
+.hamburger-icon {
+    color: $primary-color;
+}

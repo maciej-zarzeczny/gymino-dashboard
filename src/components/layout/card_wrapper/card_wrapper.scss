@@ -1,0 +1,21 @@
+@import '../../../assets/styles/variables';
+@import '../../../assets/styles/mixins';
+
+.card-wrapper {
+    border-radius: 5px !important;
+    background-color: white;
+    border-radius: 5px;        
+    margin-bottom: 20px;
+}
+
+.card-wrapper-title {
+    @include fontSize(18px);
+    font-weight: bold;
+    padding: 15px;
+    background-color: $medium-grey;
+
+}
+
+.children {
+    padding: 15px;
+}

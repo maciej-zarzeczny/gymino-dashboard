@@ -1,0 +1,32 @@
+@import '../../../assets/styles/variables';
+@import '../../../assets/styles/mixins';
+
+.training-image {
+    border-radius: 5px;
+}
+
+.training-name { 
+    @include fontSize(18px);
+    color: $primary-color;    
+}
+
+.amount {
+    @include fontSize(18px);
+    color: $accent-color;
+    font-weight: bold;
+}
+
+.top-trainings-subtitle {
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+.top-trainings-subtitle p {
+    color: $grey;
+    font-weight: bold;
+}
+
+.top-trainers-divider {
+    background-color: $grey !important;    
+    margin: 0 !important;
+}

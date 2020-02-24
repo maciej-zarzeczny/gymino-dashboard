@@ -1,5 +1,24 @@
+@import './assets/styles/_variables';
+
 body {
-  margin: 0;
+  margin: 0;    
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-family: 'Roboto';  
+  background-color: $light-grey;
+}
+
+.wrapper {
+  padding-left: 300px;  
+}
+
+.content {
+  padding-left: 35px;
+  padding-right: 35px;
+}
+
+@media only screen and (max-width : 992px) {
+	.wrapper {
+		padding-left: 0;
+	}
 }
