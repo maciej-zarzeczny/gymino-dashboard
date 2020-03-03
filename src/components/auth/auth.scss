@@ -1,0 +1,46 @@
+.auth-page {    
+    // background: url('/images/auth_background_image.png') no-repeat center fixed;
+    background: url('/images/auth_background_image_small.png') no-repeat center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;    
+    min-height: 100vh;
+}
+
+.auth-page .content {
+    padding-top: 35px;
+    padding-left: 35px;
+    padding-right: 35px;
+}
+
+.auth-page h4 {
+    margin: 0 !important;
+}
+
+.logo-img {
+    max-width: 50% !important;
+}
+
+.auth-title {
+    font-weight: bold;
+    padding-top: 25px;
+}
+
+.forgot-password-btn {
+    text-transform: none !important;
+}
+
+.auth-btn-wrapper {
+    display: block !important;
+    width: 30%;
+}
+.auth-page a {
+    margin-right: 5px;
+}
+
+@media only screen and (max-width: 992px) {
+    .auth-page {
+        background: none;
+    }
+}

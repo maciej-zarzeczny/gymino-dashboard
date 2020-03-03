@@ -1,0 +1,68 @@
+@import '../../../assets/styles/variables';
+
+.add-training-header {
+    width: 100%;
+}
+
+.training-image-placeholder {
+    background-color: $medium-grey;
+    color: $accent-color;
+    padding: 75px;    
+    border-radius: 100px;
+}
+
+.general-info-card {
+    margin-bottom: 15px !important;
+}
+
+.general-info-form {
+    margin-bottom: 0 !important;
+    flex-wrap: wrap;
+}
+
+.keywords-input-field {
+    margin-top: 0 !important;
+}
+
+.chips-input-field {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+.exercises-card {
+    background-color: #fff;
+    margin: 7.5px 0 15px 0;
+}
+
+.exercises-card-header {
+    padding: 0 15px 0 15px;
+    margin: 0 !important;
+    background-color: $medium-grey;
+    flex-wrap: wrap;
+}
+
+.exercises-card-content {
+    padding: 24px;
+}
+
+.exercise-name {
+    font-weight: bold;
+    margin-bottom: 5px !important;
+}
+
+.exercise-image {
+    border-radius: 5px;    
+}
+
+.rest-form {
+    margin-top: 15px;
+}
+
+.no-bottom-margin {
+    margin-bottom: 0 !important;
+}
+
+.training-img { 
+    width: 175px !important;
+    height: 175px !important;
+}

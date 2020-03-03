@@ -1,4 +1,5 @@
 @import './assets/styles/_variables';
+@import './assets/styles/_mixins';
 
 body {
   margin: 0;    
@@ -9,12 +10,22 @@ body {
 }
 
 .wrapper {
-  padding-left: 300px;  
+  padding-left: 335px;  
+  padding-right: 35px;
 }
 
-.content {
-  padding-left: 35px;
-  padding-right: 35px;
+.card-top-title {
+  @include fontSize(20px);  
+  color: $primary-color;
+  margin: 0;
+}
+
+.no-bottom-margin {
+  margin-bottom: 0 !important;
+}
+
+.no-top-margin {
+  margin-top: 0 !important;
 }
 
 @media only screen and (max-width : 992px) {

@@ -13,7 +13,7 @@ class TopTraining extends Component {
     }    
     render() {
         const trainings = this.state.topTrainings.map((training) => {
-            const amount = training.amount > 1000 ? training.amount / 1000 + ' K' : training.amount;
+            const amount = training.amount > 1000 ? Math.floor(training.amount / 1000) + ' K' : training.amount;
             return (
                 <div className="row valign-wrapper" key={ training.id }>
                     <div className="col s2">

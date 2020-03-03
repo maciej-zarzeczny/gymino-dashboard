@@ -1,0 +1,16 @@
+@import '../../../assets/styles/variables';
+
+.custom-tooltip {
+    background-color: #ffffffE6;
+    padding: 5px 10px 5px 10px;
+    border: 1px solid $grey;
+}
+
+.custom-label {
+    color: $primary-color;
+    font-weight: bold;    
+}
+
+.custom-intro {
+    font-size: 25px;    
+}
