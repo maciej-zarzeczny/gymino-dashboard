@@ -193,7 +193,6 @@ class EditData extends Component {
                                             <label htmlFor="email-field">Email</label>
                                         </div>
                                         <div className="col s12 input-field">
-                                            <i className="fas fa-venus-mars"></i>
                                             <select defaultValue="0" id="gender-select" className="select-field" onChange={ this.handleInputChange } >
                                                 <option value="0" disabled>Wybierz</option>
                                                 <option value="1">Mężczyzna</option>

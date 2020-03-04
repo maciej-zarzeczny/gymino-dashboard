@@ -66,7 +66,7 @@ function Menu(props)  {
                 <li>
                     <div className="row valign-wrapper sidenav-link">
                         <div className="col s11">
-                            <a href="#!" className="valign-wrapper"><i className="material-icons left">power_settings_new</i>Wyloguj</a>
+                        <NavLink to="/login" activeClassName="active-link" className="valign-wrapper"><i className="material-icons left">power_settings_new</i>Wyloguj się</NavLink>
                         </div>
                         <div className="col auto">
                             <i className="material-icons small right btn-icon">chevron_right</i>
