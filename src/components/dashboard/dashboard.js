@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 import './dashboard.scss';
 import InfoCard from './info_card/info_card';
 import CardWrapper from '../layout/card_wrapper/card_wrapper';
-import TopTrainings from '../trainings/top_trainings/top_trainings';
+import TopWorkouts from '../workouts/top_workouts/top_workouts';
 import Chart from './chart/chart';
 import { Sidenav } from 'materialize-css';
+import { connect } from 'react-redux';
 
 class Dashboard extends Component {
     componentDidMount() {
@@ -12,6 +13,7 @@ class Dashboard extends Component {
         Sidenav.init(elems);
     }
     render() {
+        const { topWorkouts } = this.props;
         return (
             <div className="dashboard wrapper">
                 <h4>Panel</h4>
@@ -37,7 +39,7 @@ class Dashboard extends Component {
                     </div>
                     <div className="col s12 xl4">
                         <CardWrapper title="TOP 5 treningów">
-                            <TopTrainings />
+                            <TopWorkouts data={ topWorkouts } />
                         </CardWrapper>
                     </div>
                 </div>
@@ -46,4 +48,10 @@ class Dashboard extends Component {
     }    
 }
 
-export default Dashboard
+function mapStateToProps(state) {
+    return {
+        topWorkouts: state.workout.topWorkouts
+    }
+}
+
+export default connect(mapStateToProps)(Dashboard)

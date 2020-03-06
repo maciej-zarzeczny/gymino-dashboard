@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import M from 'materialize-css';
-import './add_training.scss';
+import './add_workout.scss';
 import Exercises from './exercises';
 import AddedExercise from './added_exercise';
+import { connect } from 'react-redux';
+import { createWorkout } from '../../../redux/actions/workout_actions';
 
 class AddTraining extends Component {    
     state = {           
@@ -15,10 +17,16 @@ class AddTraining extends Component {
         difficulty: 0,
     }
     componentDidMount() {
-        var chips = document.querySelectorAll('.chips-placeholder');
+        var chips = document.querySelectorAll('.chips-placeholder');        
         var select = document.querySelectorAll('select');
         M.FormSelect.init(select);
-        M.Chips.init(chips, { placeholder: 'Słowa kluczowe', secondaryPlaceholder: '+słowo kluczowe', limit: 3 });
+        M.Chips.init(chips, { 
+            placeholder: 'Słowa kluczowe',
+            secondaryPlaceholder: '+słowo kluczowe',
+            limit: 3, 
+            onChipAdd: () => this.onChipAdd(chips[0]),
+            onChipDelete: () => this.onChipDelete(chips[0])
+          });
     }
     addExercise = (exercise) => {
         let exercises = [...this.state.exercises, exercise];
@@ -49,20 +57,30 @@ class AddTraining extends Component {
             exercises
         });
     }
-    submitTraining = () => {
-        var chips = document.querySelectorAll('.chips');
-        var instance = M.Chips.getInstance(chips[0]);
-        var keywords = [];
-        for (let i = 0; i < instance.chipsData.length; i++) {
-            const el = instance.chipsData[i];
-            keywords.push(el.tag);
-        }
-        
-        this.setState({
-            keywords
-        });
+    submitTraining = () => {        
+        const { exercises, keywords, image, name, duration, difficulty, description } = this.state;
 
-        console.log(this.state);
+        if (keywords.length === 0 || image === '' || name === '' || duration === '' || difficulty === 0 || description === '') {
+            alert ('Błąd: Wszystkie pola muszą być wypełnione');
+        } else if (exercises.length === 0) {
+            alert('Błąd: Należy dodać minimum jedno ćwiczenie do treningu');
+        } else if(isNaN(duration)) {
+            alert('Błąd: Niepoprawna wartość czasu trwania treningu');
+        } else if (duration <= 0) {
+            alert ('Błąd: Czas trwania treningu musi być większy od zera');
+        } else {
+            let error = false;
+            exercises.forEach(exercise => {
+                if (exercise.rest === 0 || exercise.setRest === 0) {
+                    error = true;
+                    alert('Błąd: Uzupełnij dane dotyczącze serii i czasów odpoczynku we wszystkich ćwiczeniach');
+                }
+            });
+
+            if (!error) {                
+                this.props.createWorkout(this.state);
+            }            
+        }        
     }
     handleImageChange = (e) => {
         this.setState({
@@ -90,11 +108,31 @@ class AddTraining extends Component {
                 this.setState({
                     difficulty: parseInt(e.target.value)
                 });
-                break;
+                break;            
 
             default:                                  
                 break;
         }
+    }
+    onChipAdd = (chips) => {
+        var instance = M.Chips.getInstance(chips);
+        let keywords = [...this.state.keywords, instance.chipsData[this.state.keywords.length].tag]
+
+        this.setState({
+            keywords
+        })
+    }
+    onChipDelete = (chips) => {
+        var instance = M.Chips.getInstance(chips);
+        let keywords = [];
+        for (let i = 0; i < instance.chipsData.length; i++) {
+            const el = instance.chipsData[i];
+            keywords.push(el.tag);
+        }
+
+        this.setState({
+            keywords
+        })
     }
     render() {        
         const addedExercisesList = this.state.exercises.length > 0 ? this.state.exercises.map((exercise) => {
@@ -117,7 +155,7 @@ class AddTraining extends Component {
                 <div className="row">
                     <div className="col s12">
                         <p className="card-top-title">Informacje ogólne</p>
-                        <div className="card-panel">
+                        <form className="card-panel">
                             <div className="row general-info-form valign-wrapper">
                                 <div className="col s12 xl3 center file-field input-field">
                                     { this.state.image ? (
@@ -158,7 +196,7 @@ class AddTraining extends Component {
                                 </div>
                                 
                             </div>                           
-                        </div>
+                        </form>
                     </div>
                 </div>  
                 <div className="row">
@@ -175,4 +213,10 @@ class AddTraining extends Component {
     }    
 }
 
-export default AddTraining
+function mapDispatchToProps(dispatch) {
+    return {
+        createWorkout: (workout) => dispatch(createWorkout(workout))
+    }
+}
+
+export default connect(null, mapDispatchToProps)(AddTraining)

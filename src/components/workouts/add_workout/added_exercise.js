@@ -5,7 +5,7 @@ class AddedExercise extends Component {
         sets: [0],  
         rest: 0,
         setRest: 0,
-        setsVisible: false
+        setsVisible: false,
     }
     addSet = () => {                
         let sets = [...this.state.sets, 0];            
@@ -77,7 +77,7 @@ class AddedExercise extends Component {
 
         if (!error) {
             this.setState({
-                setsVisible: false
+                setsVisible: false,                
             });
             saveFunction(id, { sets, rest: rest, setRest: setRest });
         }

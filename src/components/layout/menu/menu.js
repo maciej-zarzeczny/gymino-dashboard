@@ -32,7 +32,7 @@ function Menu(props)  {
                 <li>
                     <div className="row valign-wrapper sidenav-link">
                         <div className="col s11">
-                            <NavLink to="/trainings" activeClassName="active-link" className="valign-wrapper"><i className="material-icons left">format_list_bulleted</i>Wszystkie treningi</NavLink>
+                            <NavLink to="/workouts" activeClassName="active-link" className="valign-wrapper"><i className="material-icons left">format_list_bulleted</i>Wszystkie treningi</NavLink>
                         </div>
                         <div className="col auto">
                             <i className="material-icons small right btn-icon">chevron_right</i>
@@ -42,7 +42,7 @@ function Menu(props)  {
                 <li>
                     <div className="row valign-wrapper sidenav-link">
                         <div className="col s11">
-                            <NavLink to="/add_training" activeClassName="active-link" className="valign-wrapper"><i className="material-icons left">add_box</i>Dodaj trening</NavLink>
+                            <NavLink to="/add_workout" activeClassName="active-link" className="valign-wrapper"><i className="material-icons left">add_box</i>Dodaj trening</NavLink>
                         </div>
                         <div className="col auto">
                             <i className="material-icons small right btn-icon">chevron_right</i>
