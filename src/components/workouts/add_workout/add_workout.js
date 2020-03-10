@@ -5,6 +5,7 @@ import Exercises from './exercises';
 import AddedExercise from './added_exercise';
 import { connect } from 'react-redux';
 import { createWorkout } from '../../../redux/actions/workout_actions';
+import FullPagePreloader from '../../layout/preloader/full_page_preloader';
 
 class AddTraining extends Component {    
     state = {           
@@ -18,7 +19,7 @@ class AddTraining extends Component {
     }
     componentDidMount() {
         var chips = document.querySelectorAll('.chips-placeholder');        
-        var select = document.querySelectorAll('select');
+        var select = document.querySelectorAll('select');        
         M.FormSelect.init(select);
         M.Chips.init(chips, { 
             placeholder: 'Słowa kluczowe',
@@ -26,7 +27,7 @@ class AddTraining extends Component {
             limit: 3, 
             onChipAdd: () => this.onChipAdd(chips[0]),
             onChipDelete: () => this.onChipDelete(chips[0])
-          });
+          });        
     }
     addExercise = (exercise) => {
         let exercises = [...this.state.exercises, exercise];
@@ -135,6 +136,8 @@ class AddTraining extends Component {
         })
     }
     render() {        
+        const { isLoading } = this.props;
+
         const addedExercisesList = this.state.exercises.length > 0 ? this.state.exercises.map((exercise) => {
             return (                  
                 <AddedExercise key={ exercise.id } exercise={ exercise } removeExercise={ this.removeExercise }  updateSetsData={ this.updateSetsData }/>
@@ -142,6 +145,8 @@ class AddTraining extends Component {
         }) : (
             <p>Brak dodanych ćwiczeń</p>
         );
+        
+        const preloader = isLoading && <FullPagePreloader /> 
         return (
             <div className="wrapper">
                 <div className="row valign-wrapper add-training-header">
@@ -207,16 +212,23 @@ class AddTraining extends Component {
                         <p className="card-top-title">Dodane ćwiczenia</p>
                         { addedExercisesList }
                     </div>
-                </div>    
+                </div>                
+                { preloader } 
             </div>                           
         )
     }    
 }
 
-function mapDispatchToProps(dispatch) {
+function mapStateToProps(state) {    
     return {
-        createWorkout: (workout) => dispatch(createWorkout(workout))
+        isLoading: state.workout.isLoading,        
     }
 }
 
-export default connect(null, mapDispatchToProps)(AddTraining)
+function mapDispatchToProps(dispatch, ownProps) {
+    return {
+        createWorkout: (workout) => dispatch(createWorkout(workout, ownProps))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddTraining)

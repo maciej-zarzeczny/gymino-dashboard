@@ -1,0 +1,22 @@
+@import '../../../assets/styles/variables';
+
+.alert-wrapper {
+    border-radius: 5px;    
+}
+
+.alert-content p {
+    color: $primary-color;
+    margin: 0 !important;
+    padding: 25px;
+    font-weight: bold;
+}
+
+.alert-content p i {
+    margin-left: 10px;    
+    color: $primary-color;
+}
+
+.alert-wrapper .cancel-icon {
+    padding-right: 20px;
+    color: $primary-color;
+}

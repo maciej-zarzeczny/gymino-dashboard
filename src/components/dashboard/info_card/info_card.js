@@ -7,7 +7,7 @@ function InfoCard(props) {
         <div>
             <div className={ "decoration darken-1 " + accentColor }></div>
             <div className="card-panel white info-card">
-                <div className="row valign-wrapper card-content">
+                <div className="row valign-wrapper card-content no-padding">
                     <div className="col s10">
                         <span className={ "card-title truncate darken-1 " + accentColor + "-text" }>{ title }</span>                        
                         <span className="card-data truncate">{ content }</span>

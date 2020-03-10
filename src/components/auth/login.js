@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import './auth.scss';
 import Logo from '../../assets/images/dark_logo_web.png';
 import { NavLink } from 'react-router-dom';
+import { signIn } from '../../redux/actions/auth_actions'
+import { connect } from 'react-redux'
+import FullPagePreloader from '../layout/preloader/full_page_preloader'
 
 class Login extends Component {
     state = {
@@ -12,8 +15,10 @@ class Login extends Component {
         const { email, password } = this.state;
         e.preventDefault();
         if (email !== '' && password !== '') {
-            this.props.history.push('/');
-        }        
+            this.props.signIn(this.state)
+        } else {
+            alert('Podaj wszystkie dane')
+        }
     }
     handleChange = (e) => {
         this.setState({
@@ -21,9 +26,20 @@ class Login extends Component {
         })
     }
     render() {
+        const { authError, isLoading } = this.props
+        const preloader = isLoading && (
+            <div className="row">
+                <div className="col s12 l6">
+                    <FullPagePreloader />
+                </div>
+            </div>
+        )
+        const errorText = authError && (
+            <p className="help-text red-text darken-1">Logowanie nie powiodło się. Błędny email lub hasło</p>
+        )
         return (
             <div className="auth-page valign-wrapper">
-                <div className="container">
+                <div className="container">                    
                      <div className="row">
                          <div className="col s12 l6 center">
                              <img src={ Logo } alt="Sqilly logo" className="responsive-img logo-img" />
@@ -32,9 +48,10 @@ class Login extends Component {
                      <div className="row">
                          <div className="col s12 l6">
                              <h4 className="auth-title">Logowanie</h4>
+                             { errorText }
                          </div>
-                     </div>
-                     <div className="section"></div>
+                     </div>                     
+                     <div className="section"></div>                     
                      <form onSubmit={ this.handleSubmit }>
                         <div className="row no-bottom-margin">
                             <div className="col s12 l6 input-field">
@@ -43,7 +60,7 @@ class Login extends Component {
                                 <label htmlFor="email">Email</label>
                                 <span className="helper-text" data-error="Podany adres email jest nieprawidłowy"></span>
                             </div>
-                        </div>
+                        </div>                        
                         <div className="row">
                             <div className="col s12 l6 input-field">
                                 <i className="material-icons prefix">lock</i>
@@ -65,10 +82,24 @@ class Login extends Component {
                             </div>
                         </div>
                      </form>
-                </div>            
+                     { preloader }
+                </div>                
             </div>
         )
     }    
 }
 
-export default Login
+function mapStateToProps(state) {
+    return {
+        isLoading: state.auth.isLoading,
+        authError: state.auth.authError
+    }    
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        signIn: (credentials) => dispatch(signIn(credentials))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login)

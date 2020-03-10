@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import './top_workouts.scss';
-import Preloader from '../../layout/preloader/preloader';
+// import Preloader from '../../layout/preloader/preloader';
 
 class topWorkouts extends Component {    
     render() {
         const { data } = this.props;
-        const workoutsList = data ? data.map((workout) => {
+        const workoutsList = data.length > 0 ? data.map((workout) => {
             const amount = workout.amount > 1000 ? Math.floor(workout.amount / 1000) + ' K' : workout.amount;
             return (
                 <div className="row valign-wrapper" key={ workout.id }>
@@ -21,7 +21,7 @@ class topWorkouts extends Component {
                 </div>
             );
         }) : (
-            <Preloader active={ true } />
+            <p>Zbyt mało dodanych treningów</p>
         );
         return (
             <div>

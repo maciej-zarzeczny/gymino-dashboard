@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import './edit_data.scss';
 import M from 'materialize-css';
 import NewSupplementModal from './new_supplement_modal';
+import { connect } from 'react-redux'
+import { updateUserData } from '../../redux/actions/user_actions'
+import FullPagePreloader from '../layout/preloader/full_page_preloader'
 
 class EditData extends Component {
     state = {
@@ -9,20 +12,60 @@ class EditData extends Component {
         name: '',
         email: '',
         gender: '',
-        calisthenics: false,
-        gym: false,
+        trainingType: '',
         age: '',
         weight: '',
         height: '',
-        trainingDuration: '',
+        trainingTime: '',
         dataChanged: false,
-        supplements: [{ id: 1, name: 'Kreatyna', form: 1, amount: 5, unit: 'g', portionsPerDay: 1 }],
+        supplements: [],
+        initialValuesSet: false
     }
-    componentDidMount() {
-        var selects = document.querySelectorAll('.select-field');
-        var modal = document.querySelectorAll('.modal');
-        M.FormSelect.init(selects);
+    componentDidMount() {        
+        var modal = document.querySelectorAll('.modal');        
         M.Modal.init(modal);
+
+        if (this.props.user.name !== undefined) {            
+            this.setInitialValues();
+        }
+    }
+    componentDidUpdate(prevProps, prevState) {
+        if (!this.state.initialValuesSet && this.props.user.name !== undefined) {
+            this.setInitialValues();
+        }
+        if (!prevState.initialValuesSet && this.state.initialValuesSet) {
+            var selects = document.querySelectorAll('.select-field');
+            M.FormSelect.init(selects);            
+        }        
+    }
+    setInitialValues() {
+        var trainingType = ''
+        if (this.props.user.gym && this.props.user.calisthenics) {
+            trainingType = '3'
+        } else if (this.props.user.calisthenics) {
+            trainingType = '2'
+        } else if (this.props.user.gym) {
+            trainingType = '1'
+        } else {
+            trainingType = '0'
+        }
+
+        var age = this.props.user.age ? this.props.user.age : '' 
+        var weight = this.props.user.weight ? this.props.user.weight : '' 
+        var height = this.props.user.height ? this.props.user.height : '' 
+        var trainingTime = this.props.user.trainingTime ? this.props.user.trainingTime : '' 
+
+        this.setState({
+            name: this.props.user.name,
+            email: this.props.email,
+            gender : this.props.user.gender,
+            trainingType,
+            age,
+            weight,
+            height,
+            trainingTime,
+            initialValuesSet: true
+        })               
     }
     handleImageChange = (e) => {
         this.setState({
@@ -46,27 +89,13 @@ class EditData extends Component {
                 break;
             case 'gender-select':
                 this.setState({
-                    gender: parseInt(e.target.value - 1)
+                    gender: parseInt(e.target.value)
                 });
                 break;
             case 'training-type-select':
-                let trainingType = parseInt(e.target.value);
-                if (trainingType === 1) {
-                    this.setState({
-                        gym: true,
-                        calisthenics: false
-                    })
-                } else if (trainingType === 2) {
-                    this.setState({
-                        gym: false,
-                        calisthenics: true
-                    })
-                } else {
-                    this.setState({
-                        gym: true,
-                        calisthenics: true
-                    })
-                }                
+                this.setState({
+                    trainingType: e.target.value
+                })                
                 break;
             case 'age-field':                        
                 this.setState({
@@ -85,7 +114,7 @@ class EditData extends Component {
                 break;
             case 'training-duration-field':
                 this.setState({
-                    trainingDuration: e.target.value === '' ? '' : parseInt(e.target.value)
+                    trainingTime: e.target.value === '' ? '' : parseInt(e.target.value)
                 });
                 break;
 
@@ -93,17 +122,26 @@ class EditData extends Component {
                 break;
         }
     }
-    handleSaveButton = () => {        
-        const { name, email, age, weight, height, trainingDuration, calisthenics, gym } = this.state;
-        if (name === '' || email === '' || age === '' || weight === '' || height === '' || trainingDuration === '' || (!calisthenics && !gym)) {
+    handleSaveButton = () => {
+        const { name, email, age, weight, height, trainingTime, trainingType, gender } = this.state;
+        if (name === '' || email === '' || age === '' || weight === '' || height === '' || trainingTime === '' || trainingType === 0 || gender === 0) {
             alert('Błąd: Wszystkie pola muszą być wypełnione');
-        } else if (age <= 0 || weight <= 0 || height <= 0 || trainingDuration <= 0) {
+        } else if (age <= 0 || weight <= 0 || height <= 0 || trainingTime <= 0) {
             alert('Błąd: Wprowadzone wartości muszą być większe od zera');
         } else {
             this.setState({
                 dataChanged: false
             });
-            console.log(this.state);
+            
+            this.props.updateUserData({
+                name,
+                gender,
+                age,
+                weight,
+                height,
+                trainingTime,
+                trainingType,
+            })
         }        
     }
     addSupplement = (supplement) => {
@@ -125,7 +163,10 @@ class EditData extends Component {
             supplements
         });
     }
-    render() {
+    render() {           
+        const preloader = this.props.isLoading && (
+            <FullPagePreloader />
+        )       
         const supplementsList = this.state.supplements.length > 0 ? this.state.supplements.map((supplement) => {
             let unit = '';
             if (supplement.unit === 1) {
@@ -172,7 +213,7 @@ class EditData extends Component {
                     <div className="col s12 xl6">
                         <p className="card-top-title">Informacje ogólne</p>
                         <div className="card-panel">
-                            <div className="row general-info-form valign-wrapper">
+                            <div className="row general-info-form valign-wrapper">                                                            
                                 <div className="col s12 xl6 center file-field input-field">
                                     { this.state.image ? (
                                             <img src={ this.state.image } alt="training" className="responsive-img profile-pic-img circle"/>
@@ -186,22 +227,22 @@ class EditData extends Component {
                                     <div className="row">
                                         <div className="col s12 input-field">                                            
                                             <input id="username-field" type="text" onChange={ this.handleInputChange } value={ this.state.name } />
-                                            <label htmlFor="username-field">Nazwa użytkownika</label>
+                                            <label htmlFor="username-field" className="active">Nazwa użytkownika</label>
                                         </div>
                                         <div className="col s12 input-field">                                            
                                             <input id="email-field" type="text" onChange={ this.handleInputChange } value={ this.state.email } />
-                                            <label htmlFor="email-field">Email</label>
+                                            <label htmlFor="email-field" className="active">Email</label>
                                         </div>
                                         <div className="col s12 input-field">
-                                            <select defaultValue="0" id="gender-select" className="select-field" onChange={ this.handleInputChange } >
+                                            <select id="gender-select" className="select-field" onChange={ this.handleInputChange } value={ this.state.gender } >
                                                 <option value="0" disabled>Wybierz</option>
                                                 <option value="1">Mężczyzna</option>
-                                                <option value="2">Kobieta</option>                                                
+                                                <option value="2">Kobieta</option>
                                             </select>
                                             <label>Płeć</label>
                                         </div>
                                         <div className="col s12 input-field">
-                                            <select defaultValue="0" id="training-type-select" className="select-field" onChange={ this.handleInputChange } >
+                                            <select id="training-type-select" className="select-field" onChange={ this.handleInputChange } value={ this.state.trainingType } >
                                                 <option value="0" disabled>Wybierz</option>
                                                 <option value="1">Siłownia</option>
                                                 <option value="2">Kalistenika</option>
@@ -222,19 +263,19 @@ class EditData extends Component {
                                     <div className="row">
                                         <div className="col s12 input-field">                                            
                                             <input id="age-field" type="number" onChange={ this.handleInputChange } value={ this.state.age } />
-                                            <label htmlFor="age-field">Wiek</label>
+                                            <label htmlFor="age-field" className="active">Wiek</label>
                                         </div>
                                         <div className="col s12 input-field">                                            
                                             <input id="weight-field" type="number" onChange={ this.handleInputChange } value={ this.state.weight } />
-                                            <label htmlFor="weight-field">Waga (kilogramy)</label>
+                                            <label htmlFor="weight-field" className="active">Waga (kilogramy)</label>
                                         </div>
                                         <div className="col s12 input-field">                                            
                                             <input id="height-field" type="number" onChange={ this.handleInputChange } value={ this.state.height } />
-                                            <label htmlFor="height-field">Wzrost (centymetry)</label>
+                                            <label htmlFor="height-field" className="active">Wzrost (centymetry)</label>
                                         </div>
                                         <div className="col s12 input-field">                                            
-                                            <input id="training-duration-field" type="number" onChange={ this.handleInputChange } value={ this.state.trainingDuration } />
-                                            <label htmlFor="training-duration-field">Staż treningowy (lata)</label>
+                                            <input id="training-duration-field" type="number" onChange={ this.handleInputChange } value={ this.state.trainingTime } />
+                                            <label htmlFor="training-duration-field" className="active">Staż treningowy (lata)</label>
                                         </div>                                                 
                                     </div>                                        
                                 </div>                                
@@ -249,10 +290,25 @@ class EditData extends Component {
                         <a href="#new-supplement-modal" className="btn btn-small waves-effect green darken-1 modal-trigger">Dodaj</a>
                     </div>
                 </div>
-                <NewSupplementModal addSupplement={ this.addSupplement } />                
+                <NewSupplementModal addSupplement={ this.addSupplement } />       
+                { preloader }         
             </div>
         )
     }    
 }
 
-export default EditData
+function mapStateToProps(state) {
+    return {
+        user: state.firebase.profile,
+        email: state.firebase.auth.email,
+        isLoading: state.user.isLoading
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        updateUserData: (data) => dispatch(updateUserData(data))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(EditData)

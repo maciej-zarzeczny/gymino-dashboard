@@ -2,19 +2,17 @@ import React, { Component } from 'react'
 import './auth.scss';
 import Logo from '../../assets/images/dark_logo_web.png';
 import { NavLink } from 'react-router-dom';
-import M from 'materialize-css';
+import { connect } from 'react-redux'
+import { signUp } from '../../redux/actions/auth_actions'
+import FullPagePreloader from '../layout/preloader/full_page_preloader'
 
 class SignUp extends Component {
     state = {
         name: '',
         email: '',
         password: '',
-        validatePassword: '',        
-    }
-    componentDidMount() {
-        var selects = document.querySelectorAll('select');
-        M.FormSelect.init(selects);
-    }
+        validatePassword: '',
+    }    
     handleSubmit = (e) => {
         const { name, email, password, validatePassword } = this.state;
         e.preventDefault();
@@ -23,7 +21,11 @@ class SignUp extends Component {
         } else if (password !== validatePassword) {
             alert('Błąd: Podane hasła różnią się');
         } else {
-            this.props.history.push('/');
+            this.props.signUp({
+                email: email,
+                password: password,
+                name: name,                
+             })
         }     
     }
     handleChange = (e) => {
@@ -32,6 +34,17 @@ class SignUp extends Component {
         })
     }
     render() {
+        const { authError, isLoading } = this.props
+        const preloader = isLoading && (
+            <div className="row">
+                <div className="col s12 l6">
+                    <FullPagePreloader />
+                </div>
+            </div>
+        )
+        const errorText = authError && (
+            <p className="help-text red-text darken-1">Podczas rejestracji wystąpił błąd: { authError }</p>
+        )
         return (
             <div className="auth-page valign-wrapper">
                 <div className="container">
@@ -43,6 +56,7 @@ class SignUp extends Component {
                      <div className="row">
                          <div className="col s12 l6">
                              <h4 className="auth-title">Rejestracja</h4>
+                             { errorText }
                          </div>
                      </div>
                      <div className="section"></div>
@@ -87,10 +101,24 @@ class SignUp extends Component {
                             </div>
                         </div>
                      </form>
+                     { preloader }
                 </div>            
             </div>
         )
     }    
 }
 
-export default SignUp
+function mapStateToProps(state) {
+    return {
+        isLoading: state.auth.isLoading,
+        authError: state.auth.authError
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        signUp: (newUser) => dispatch(signUp(newUser))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp)
