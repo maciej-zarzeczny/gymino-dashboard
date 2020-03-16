@@ -1,40 +1,66 @@
 import React, { Component } from 'react';
+import { fetchExercises, fetchMoreExercises } from '../../../redux/actions/exercise_actions'
+import { connect } from 'react-redux'
+import { NavLink } from 'react-router-dom'
+import Preloader from '../../layout/preloader/preloader'
 
 class Exercises extends Component {
-    state = {
-        exercises: [
-            { id: 1, name: 'Wyciskanie na ławcze płaskiej leżąc', rest: 0, setRest: 0, sets: [] },
-            { id: 2, name: 'Front Lever', rest: 0, setRest: 0, sets: [] },
-            { id: 3, name: 'Back Lever', rest: 0, setRest: 0, sets: [] },
-            { id: 4, name: 'Podciąganie nachwytem', rest: 0, setRest: 0, sets: [] },
-        ],
+    componentDidMount() {
+        if (!this.props.exercisesLoaded) {
+            this.props.fetchExercises()
+        }
+
+        this.fetchStarted = false;
+        var object = document.querySelector('.exercises-card');
+        object.addEventListener('scroll', () => {
+            if(object.offsetHeight + object.scrollTop === object.scrollHeight)
+            {                
+                if (!this.props.allExercisesLoaded && !this.fetchStarted) {
+                    this.fetchStarted = true;
+                    this.props.fetchMoreExercises();                    
+                }
+            }
+        })
+    }
+    componentDidUpdate(prevProps) {
+        if (prevProps.exercises.length !== this.props.exercises.length) {
+            this.fetchStarted = false;
+        }        
     }
     render() {
         const { addExercise } = this.props;
-        const exercisesList = this.state.exercises.map((exercise) => {
+        const exercisesList = !this.props.isLoading ? this.props.exercises.length > 0 ? this.props.exercises.map((exercise) => {
             return (
                 <div key={ exercise.id }>
                     <div className="row valign-wrapper">
                         <div className="col s2">
-                            <img src="https://firebasestorage.googleapis.com/v0/b/sqilly.appspot.com/o/kura_1.jpg?alt=media&token=bb051e32-c25a-4a77-aa2b-e2bca6a8c5aa" alt={ exercise.name } className="responsive-img exercise-image" />
+                            <img src={ exercise.image } alt={ exercise.name } className="responsive-img exercise-list-image" />
                         </div>
                         <div className="col s7">
                             <p className="exercise-name truncate">{ exercise.name }</p>
                         </div>
                         <div className="col s3">
-                            <a href="#!" onClick={ () => addExercise(exercise) } className="btn waves-effect blue darken-1 right">Dodaj</a>
-                        </div>                    
+                            <a href="#!" onClick={ () => addExercise({ id: exercise.id, name: exercise.name, image: exercise.image }) } className="btn waves-effect blue darken-1 right">Dodaj</a>
+                        </div>
                     </div>
                     <div className="divider"></div>
                 </div>
             );
-        });
+        }) : (
+            <div>
+                <p>Brak dodanych ćwiczeń. Aby stworzyć trening należy najpierw dodać ćwiczenia</p>
+                <NavLink to="/add-exercise"><button className="btn red darken-1 waves-effect">Dodaj ćwiczenia</button></NavLink>
+            </div>
+        ) : (
+            <Preloader active={ true } />
+        )  
+        const moreLoading = this.props.moreLoading && <Preloader active={ true } /> 
         return (
             <div>
                 <p className="card-top-title">Baza ćwiczeń</p>
                 <div className="exercises-card z-depth-1">
-                    <div className="exercises-card-header row valign-wrapper">                                
-                        <div className="col s12 xl5 input-field">
+                    {/* <div className="exercises-card-header row valign-wrapper">                                
+                        <div className="col s12 input-field">
                             <select defaultValue="0">
                                 <option value="0" disabled>Partia mięśniowa</option>
                                 <option value="1">Brzuch</option>
@@ -46,17 +72,11 @@ class Exercises extends Component {
                                 <option value="7">Barki</option>
                                 <option value="8">Całe ciało</option>
                             </select>                                    
-                        </div>
-                        <div className="col s11 xl6 input-field">                                    
-                            <input id="search" type="text" />
-                            <label htmlFor="search">Szukaj...</label>
-                        </div>
-                        <div className="col s1 xl1">
-                            <i className="material-icons right">search</i>
-                        </div>
-                    </div>
+                        </div>                        
+                    </div> */}
                     <div className="exercises-card-content">
                         { exercisesList }
+                        { moreLoading }
                     </div>
                 </div>
             </div>
@@ -64,4 +84,21 @@ class Exercises extends Component {
     }
 }
 
-export default Exercises
+function mapStateToProps(state) {
+    return {
+        exercises: state.exercise.exercises,
+        exercisesLoaded: state.exercise.exercisesLoaded,
+        isLoading: state.exercise.isLoading,
+        moreLoading: state.exercise.moreLoading,
+        allExercisesLoaded: state.exercise.allExercisesLoaded
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        fetchExercises: () => dispatch(fetchExercises()),
+        fetchMoreExercises: () => dispatch(fetchMoreExercises())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Exercises)

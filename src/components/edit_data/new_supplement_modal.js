@@ -9,9 +9,9 @@ class NewSupplementModal extends Component {
     }
     state = {
         name: '',
-        form: 0,
+        form: 1,
         amount: '',
-        unit: '',
+        unit: 3,
         portionsPerDay: '',
     }    
     handleInputChange = (e) => {
@@ -23,7 +23,7 @@ class NewSupplementModal extends Component {
                 break;
             case 'supplement-form-select':
                 this.setState({
-                    form: e.target.value
+                    form: parseInt(e.target.value)
                 })
                 break;
             case 'supplement-amount-field':
@@ -38,7 +38,7 @@ class NewSupplementModal extends Component {
                 break;
             case 'supplement-portions-field':
                 this.setState({
-                    portionsPerDay: e.target.value === '' ? '' : e.target.value
+                    portionsPerDay: e.target.value === '' ? '' : parseInt(e.target.value)
                 })
                 break;
 
@@ -72,8 +72,7 @@ class NewSupplementModal extends Component {
                             <label htmlFor="supplement-name-field">Nazwa</label>
                         </div>
                         <div className="col s12 input-field">
-                            <select defaultValue="0" id="supplement-form-select" className="select-field" onChange={ this.handleInputChange } >
-                                <option value="0" disabled>Wybierz</option>
+                            <select defaultValue="1" id="supplement-form-select" className="select-field" onChange={ this.handleInputChange }>                                
                                 <option value="1">Proszek</option>
                                 <option value="2">Tabletki</option>                                    
                             </select>

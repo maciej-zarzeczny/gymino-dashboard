@@ -11,6 +11,12 @@
     border-radius: 100px;
 }
 
+.training-img { 
+    width: 175px !important;
+    height: 175px !important;
+    object-fit: cover;
+}
+
 .general-info-card {
     margin-bottom: 15px !important;
 }
@@ -32,6 +38,8 @@
 .exercises-card {
     background-color: #fff;
     margin: 7.5px 0 15px 0;
+    height: 50vh;
+    overflow: scroll;
 }
 
 .exercises-card-header {
@@ -50,8 +58,19 @@
     margin-bottom: 5px !important;
 }
 
-.exercise-image {
-    border-radius: 5px;    
+.exercise-list-image {
+    border-radius: 5px; 
+    margin-top: 20px;    
+    object-fit: cover;
+    width: 75px !important;
+    height: 75px !important;
+}
+
+.exercise-list-image-no-padding {
+    border-radius: 5px;      
+    object-fit: cover;
+    width: 75px !important;
+    height: 75px !important;
 }
 
 .rest-form {
@@ -60,9 +79,4 @@
 
 .no-bottom-margin {
     margin-bottom: 0 !important;
-}
-
-.training-img { 
-    width: 175px !important;
-    height: 175px !important;
 }

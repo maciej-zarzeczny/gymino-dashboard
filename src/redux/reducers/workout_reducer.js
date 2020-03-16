@@ -8,14 +8,14 @@ const initState = {
 const workoutReducer = (state = initState, action) => {
     let workouts = []
     switch (action.type) {
-        case 'START_REQUEST':            
+        case 'START_WORKOUTS_REQUEST':            
             return {
                 ...state,
                 isLoading: true,
             }    
 
         case 'GET_WORKOUTS_SUCCESS':
-            workouts = [...state.workouts, ...action.workouts]            
+            workouts = action.workouts
             return {
                 ...state,
                 workouts,
@@ -24,11 +24,11 @@ const workoutReducer = (state = initState, action) => {
             }
 
         case 'GET_WORKOUTS_ERROR':
-            alert('Błąd: ' + action.err)
+            alert('Błąd: ' + action.err.message)
             return {
                 ...state,
                 isLoading: false,
-            };
+            };            
 
         case 'CREATE_WORKOUT_SUCCESS':
             workouts = [...state.workouts, action.workout]
@@ -39,7 +39,7 @@ const workoutReducer = (state = initState, action) => {
             };
 
         case 'CREATE_WORKOUT_ERROR':
-            alert('Błąd: ' + action.err) 
+            alert('Błąd: ' + action.err)
             return {
                 ...state,
                 isLoading: false

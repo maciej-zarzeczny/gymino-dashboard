@@ -13,7 +13,8 @@
 
 .training-card-name {
     @include fontSize(24px);
-    color: $primary-color;     
+    color: $primary-color;
+    text-transform: initial !important;
 }
 
 .training-card-subtitle {
@@ -23,12 +24,4 @@
 
 .taining-card-icon {
     padding-right: 5px;
-}
-
-.badge {
-    background-color: $primary-color;
-    color: white;
-    padding: 5px 10px 5px 10px;
-    margin: 15px 0 0 0;
-    border-radius: 5px 0 0 5px;
 }

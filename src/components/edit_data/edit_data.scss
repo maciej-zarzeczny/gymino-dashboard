@@ -7,10 +7,14 @@
 .profile-pic-img {
     width: 175px !important;
     height: 175px !important;
+    object-fit: cover;    
 }
 
 .supplement-img {    
     border-radius: 5px;
+    object-fit: cover !important;
+    width: 75px !important;
+    height: 75px !important;
 }
 
 .supplement-name {

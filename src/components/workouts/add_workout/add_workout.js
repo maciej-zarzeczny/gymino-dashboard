@@ -6,12 +6,13 @@ import AddedExercise from './added_exercise';
 import { connect } from 'react-redux';
 import { createWorkout } from '../../../redux/actions/workout_actions';
 import FullPagePreloader from '../../layout/preloader/full_page_preloader';
+import Alert from '../../layout/alert/alert'
 
 class AddTraining extends Component {    
     state = {           
         exercises: [],
         keywords: [],
-        image: null,
+        image: null,           
         name: '',
         duration: '',
         description: '',
@@ -61,7 +62,9 @@ class AddTraining extends Component {
     submitTraining = () => {        
         const { exercises, keywords, image, name, duration, difficulty, description } = this.state;
 
-        if (keywords.length === 0 || image === '' || name === '' || duration === '' || difficulty === 0 || description === '') {
+        if (!this.props.user.verified) {
+            alert ('Błąd: Aby móc dodawać treningi przejdź do zakładki edytuj dane i uzupełnij wszystkie pola')
+        } else if (keywords.length === 0 || image === '' || name === '' || duration === '' || difficulty === 0 || description === '') {
             alert ('Błąd: Wszystkie pola muszą być wypełnione');
         } else if (exercises.length === 0) {
             alert('Błąd: Należy dodać minimum jedno ćwiczenie do treningu');
@@ -69,24 +72,29 @@ class AddTraining extends Component {
             alert('Błąd: Niepoprawna wartość czasu trwania treningu');
         } else if (duration <= 0) {
             alert ('Błąd: Czas trwania treningu musi być większy od zera');
+        } else if (image === null) {
+            alert ('Błąd: Dodaj zdjęcie treningu')
         } else {
-            let error = false;
+            let error = false;            
             exercises.forEach(exercise => {
-                if (exercise.rest === 0 || exercise.setRest === 0) {
-                    error = true;
-                    alert('Błąd: Uzupełnij dane dotyczącze serii i czasów odpoczynku we wszystkich ćwiczeniach');
+                if (exercise.rest === 0 || exercise.setRest === 0 || !exercise.rest || !exercise.setRest) {
+                    error = true;                        
                 }
             });
 
-            if (!error) {                
+            if (!error) {                                
                 this.props.createWorkout(this.state);
-            }            
+            } else {
+                alert('Błąd: Uzupełnij dane dotyczącze serii i czasów odpoczynku we wszystkich ćwiczeniach');
+            }
         }        
     }
     handleImageChange = (e) => {
-        this.setState({
-            image:  URL.createObjectURL(e.target.files[0])
-        });
+        if (e.target.files[0]) {
+            this.setState({
+                image: e.target.files[0],         
+            });
+        }        
     }
     handleInputChange = (e) => {
         switch (e.target.id) {
@@ -147,16 +155,26 @@ class AddTraining extends Component {
         );
         
         const preloader = isLoading && <FullPagePreloader /> 
-        return (
-            <div className="wrapper">
+
+        const alert = (this.props.user.verified !== undefined && !this.props.user.verified) && (
+            <div className="row">
+                <div className="col s12">
+                    <Alert content="Aby móc dodawać treningi przejdź do zakładki edytuj dane i uzupełnij wszystkie pola" />
+                </div>
+            </div>
+        )        
+
+        return (            
+            <div className="wrapper">                                                
                 <div className="row valign-wrapper add-training-header">
                     <div className="col s6">                
                         <h4>Dodaj nowy trening</h4>
                     </div>
                     <div className="col s6">
-                        <a href="#!" onClick={ this.submitTraining } className="btn waves-effect right">Opublikuj trening</a>
+                        <button onClick={ this.submitTraining } className="btn waves-effect right">Opublikuj trening</button>
                     </div>
                 </div>
+                { alert }
                 <div className="row">
                     <div className="col s12">
                         <p className="card-top-title">Informacje ogólne</p>
@@ -164,7 +182,7 @@ class AddTraining extends Component {
                             <div className="row general-info-form valign-wrapper">
                                 <div className="col s12 xl3 center file-field input-field">
                                     { this.state.image ? (
-                                            <img src={ this.state.image } alt="training" className="responsive-img training-img circle"/>
+                                            <img src={ URL.createObjectURL(this.state.image) } alt="training" className="responsive-img training-img circle"/>
                                         ) : 
                                         (
                                             <i className="material-icons training-image-placeholder">add_a_photo</i>
@@ -192,11 +210,12 @@ class AddTraining extends Component {
                                         </div>
                                         <div className="col s12 input-field keywords-input-field">
                                             <div className="chips chips-placeholder chips-input-field"></div>
-                                        </div>
+                                            <span className="helper-text red-text">* Po wpisaniu słowa kluczowego naciśnij enter w celu potwierdzenia (max 3)</span>
+                                        </div>                                        
                                         <div className="col s12 input-field">
                                             <textarea id="training-description" className="materialize-textarea" onChange={ this.handleInputChange } value={ this.state.description }></textarea>
                                             <label htmlFor="training-description">Opis treningu</label>
-                                        </div>
+                                        </div>                                    
                                     </div>                                        
                                 </div>
                                 
@@ -221,7 +240,8 @@ class AddTraining extends Component {
 
 function mapStateToProps(state) {    
     return {
-        isLoading: state.workout.isLoading,        
+        isLoading: state.workout.isLoading,
+        user: state.firebase.profile
     }
 }
 

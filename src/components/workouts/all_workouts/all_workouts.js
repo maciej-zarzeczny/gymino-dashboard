@@ -10,7 +10,8 @@ import moment from 'moment';
 
 class AllTrainings extends Component {
     state = {
-        id: ''
+        id: '',
+        imageName: ''
     }
     componentDidMount() {
         var modal = document.querySelector('.modal');
@@ -20,13 +21,13 @@ class AllTrainings extends Component {
         }        
     }    
     render() {
-        const { workouts, isLoading } = this.props;                   
+        const { workouts, isLoading } = this.props;                           
         const workoutsList = !isLoading ? workouts.length > 0 ? workouts.map((workout) => {            
             return (
-                <div className="col s12 l4 xl3" key={ workout.id }>
-                    <div className="card">
-                        <div className="card-image ">
-                            <img src="https://firebasestorage.googleapis.com/v0/b/sqilly.appspot.com/o/kura_1.jpg?alt=media&token=bb051e32-c25a-4a77-aa2b-e2bca6a8c5aa" alt={ workout.name } />
+                <div className="col s12 xl4" key={ workout.id }>
+                    <div className="card large">
+                        <div className="card-image">
+                            <img src={ workout.image } alt={ workout.name } className="workout-image" />
                         </div>
                         <div className="card-content">
                             <p className="training-card-name truncate">{ workout.name }</p>
@@ -34,7 +35,7 @@ class AllTrainings extends Component {
                             <p className="training-card-subtitle valign-wrapper"><i className="material-icons taining-card-icon">people</i>{ workout.amount }</p>
                         </div>
                         <div className="card-action">
-                            <button onClick={ () => this.setState({ id: workout.id }) } data-target="confirmation-modal" className="btn-small waves-effect red darken-1 modal-trigger"><i className="material-icons left">delete</i>Usuń</button>
+                            <button onClick={ () => this.setState({ id: workout.id, imageName: workout.imageName }) } data-target="confirmation-modal" className="btn-small waves-effect red darken-1 modal-trigger"><i className="material-icons left">delete</i>Usuń</button>
                         </div>
                     </div>
                 </div>
@@ -62,7 +63,7 @@ class AllTrainings extends Component {
                     </div>
                     <div className="modal-footer">
                         <button className="modal-close waves-effect waves-green btn-flat">Nie</button>
-                        <button onClick={ () => this.props.deleteWorkout(this.state.id) } className="modal-close waves-effect waves-green btn-flat">Tak</button>
+                        <button onClick={ () => this.props.deleteWorkout(this.state.id, this.state.imageName) } className="modal-close waves-effect waves-green btn-flat">Tak</button>
                     </div>
                 </div>
             </div>            
@@ -80,8 +81,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        getWorkouts: () => dispatch(getWorkouts()),
-        deleteWorkout: (id) => dispatch(deleteWorkout(id))
+        getWorkouts: () => dispatch(getWorkouts()),        
+        deleteWorkout: (id, imageName) => dispatch(deleteWorkout(id, imageName))
     }
 }
 

@@ -1,6 +1,6 @@
 const initState = {
     isLoading: false,
-    updateError: null
+    updateError: null,    
 }
 
 const userReducer = (state = initState, action) => {
@@ -13,9 +13,9 @@ const userReducer = (state = initState, action) => {
 
         case 'UPDATE_SUCCESS':
             return {
-                ...state,                
+                ...state,
                 isLoading: false,
-                updateError: null
+                updateError: null,                
             }
 
         case 'UPDATE_ERROR':

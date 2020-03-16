@@ -11,6 +11,8 @@ import AddWorkout from "./components/workouts/add_workout/add_workout";
 import EditData from "./components/edit_data/edit_data";
 import Login from "./components/auth/login";
 import SignUp from "./components/auth/sign_up";
+import AllExercises from './components/exercises/all_exercises/all_exercises'
+import AddExercise from './components/exercises/add_exercise/add_exercise'
 import NotFoundPage from './components/layout/404_page/404_page'
 import FullPagePreloader from './components/layout/preloader/full_page_preloader'
 
@@ -57,6 +59,8 @@ function App() {
             <PrivateRoute path="/workouts" component={ AllWorkouts } />
             <PrivateRoute path="/add-workout" component={ AddWorkout } />
             <PrivateRoute path="/edit-data" component={ EditData } />
+            <PrivateRoute path="/exercises" component={ AllExercises } />
+            <PrivateRoute path="/add-exercise" component={ AddExercise } />
             <AuthRoute path="/login" component={Login} />
             <AuthRoute path="/signup" component={SignUp} />
             <Route component={ NotFoundPage } />

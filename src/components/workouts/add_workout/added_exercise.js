@@ -5,7 +5,7 @@ class AddedExercise extends Component {
         sets: [0],  
         rest: 0,
         setRest: 0,
-        setsVisible: false,
+        setsVisible: true
     }
     addSet = () => {                
         let sets = [...this.state.sets, 0];            
@@ -79,7 +79,7 @@ class AddedExercise extends Component {
             this.setState({
                 setsVisible: false,                
             });
-            saveFunction(id, { sets, rest: rest, setRest: setRest });
+            saveFunction(this.props.exercise.id, { sets, rest: rest, setRest: setRest });
         }
     }
     renderSets = () => {
@@ -117,10 +117,10 @@ class AddedExercise extends Component {
             <div key={ exercise.id } className="card-panel">
                 <div className={ this.state.setsVisible ? "row valign-wrapper" : "no-bottom-margin row valign-wrapper"}>
                     <div className="col s2">
-                        <img src="https://firebasestorage.googleapis.com/v0/b/sqilly.appspot.com/o/kura_1.jpg?alt=media&token=bb051e32-c25a-4a77-aa2b-e2bca6a8c5aa" alt={ exercise.name } className="responsive-img exercise-image" />
+                        <img src={ exercise.image } alt={ exercise.name } className="responsive-img exercise-list-image-no-padding" />
                     </div>
                     <div className="col s7">
-                        <p className="exercise-name truncate">{ exercise.name }</p>                        
+                        <p className="exercise-name truncate">{ exercise.name }</p>
                         { this.state.setsVisible ? (
                             <a href="#!" className="btn btn-small waves-effect green darken-1" onClick={ () => this.saveData(exercise.id, updateSetsData) }>Zapisz</a>
                         ) : (                  

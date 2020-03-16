@@ -1,0 +1,24 @@
+@import '../../../assets/styles/variables';
+@import '../../../assets/styles/mixins';
+
+.keyword {
+    @include fontSize(13px);
+    border: 1px solid $primary-color;   
+    border-radius: 5px;
+    color: $primary-color;
+    padding: 5px 12px 5px 12px;        
+    margin-right: 5px;    
+}
+
+.exercise-image {
+    max-height: 300px;
+    object-fit: cover;
+}
+
+.keywords-row {
+    margin-top: 10px !important;
+}
+
+.activator:hover { 
+    cursor: pointer !important;
+}

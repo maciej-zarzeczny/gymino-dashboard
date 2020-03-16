@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
-import './edit_data.scss';
-import M from 'materialize-css';
-import NewSupplementModal from './new_supplement_modal';
+import './edit_data.scss'
+import M from 'materialize-css'
+import NewSupplementModal from './new_supplement_modal'
+import PowderImage from '../../assets/images/powder.jpg'
+import PillsImage from '../../assets/images/pills.jpg'
 import { connect } from 'react-redux'
 import { updateUserData } from '../../redux/actions/user_actions'
 import FullPagePreloader from '../layout/preloader/full_page_preloader'
@@ -9,6 +11,7 @@ import FullPagePreloader from '../layout/preloader/full_page_preloader'
 class EditData extends Component {
     state = {
         image: null,
+        imageUrl: null,
         name: '',
         email: '',
         gender: '',
@@ -24,19 +27,19 @@ class EditData extends Component {
     componentDidMount() {        
         var modal = document.querySelectorAll('.modal');        
         M.Modal.init(modal);
-
-        if (this.props.user.name !== undefined) {            
-            this.setInitialValues();
-        }
+        
+        if (this.props.user.name !== undefined) {
+            this.setInitialValues();            
+        }        
     }
-    componentDidUpdate(prevProps, prevState) {
+    componentDidUpdate(prevProps, prevState) {        
         if (!this.state.initialValuesSet && this.props.user.name !== undefined) {
-            this.setInitialValues();
-        }
+            this.setInitialValues();               
+        }        
         if (!prevState.initialValuesSet && this.state.initialValuesSet) {
             var selects = document.querySelectorAll('.select-field');
             M.FormSelect.init(selects);            
-        }        
+        }               
     }
     setInitialValues() {
         var trainingType = ''
@@ -54,23 +57,31 @@ class EditData extends Component {
         var weight = this.props.user.weight ? this.props.user.weight : '' 
         var height = this.props.user.height ? this.props.user.height : '' 
         var trainingTime = this.props.user.trainingTime ? this.props.user.trainingTime : '' 
+        var supplements = this.props.user.supplements ? this.props.user.supplements : [] 
+        var imageUrl = this.props.user.image ? this.props.user.image : null       
 
         this.setState({
             name: this.props.user.name,
             email: this.props.email,
             gender : this.props.user.gender,
+            imageUrl,
             trainingType,
             age,
             weight,
             height,
             trainingTime,
-            initialValuesSet: true
-        })               
+            supplements,
+            initialValuesSet: true,                        
+        })        
     }
     handleImageChange = (e) => {
-        this.setState({
-            image:  URL.createObjectURL(e.target.files[0])
-        });
+        if (e.target.files[0]) {
+            this.setState({
+                image: e.target.files[0],
+                imageUrl: URL.createObjectURL(e.target.files[0]),
+                dataChanged: true
+            });
+        }        
     }
     handleInputChange = (e) => {
         this.setState({
@@ -123,16 +134,18 @@ class EditData extends Component {
         }
     }
     handleSaveButton = () => {
-        const { name, email, age, weight, height, trainingTime, trainingType, gender } = this.state;
+        const { name, email, age, weight, height, trainingTime, trainingType, gender, supplements, image, imageUrl } = this.state;
         if (name === '' || email === '' || age === '' || weight === '' || height === '' || trainingTime === '' || trainingType === 0 || gender === 0) {
             alert('Błąd: Wszystkie pola muszą być wypełnione');
         } else if (age <= 0 || weight <= 0 || height <= 0 || trainingTime <= 0) {
             alert('Błąd: Wprowadzone wartości muszą być większe od zera');
+        } else if (image === null && imageUrl === null) {
+            alert ('Błąd: Dodaj zdjęcie profilowe')
         } else {
             this.setState({
                 dataChanged: false
             });
-            
+
             this.props.updateUserData({
                 name,
                 gender,
@@ -141,6 +154,8 @@ class EditData extends Component {
                 height,
                 trainingTime,
                 trainingType,
+                supplements,
+                image
             })
         }        
     }
@@ -151,7 +166,8 @@ class EditData extends Component {
         let newSupplements = [...supplements, supplement];
 
         this.setState({
-            supplements: newSupplements
+            supplements: newSupplements,
+            dataChanged: true
         });
     }
     removeSupplement = (id) => {
@@ -160,7 +176,8 @@ class EditData extends Component {
         });
 
         this.setState({
-            supplements
+            supplements,
+            dataChanged: true
         });
     }
     render() {           
@@ -176,11 +193,12 @@ class EditData extends Component {
             } else {
                 unit = 'g';
             }
+            
             return (
                 <div className="card-panel" key={ supplement.id }>
                     <div className="row no-bottom-margin valign-wrapper">
                         <div className="col s2 l1">
-                        <img src="https://firebasestorage.googleapis.com/v0/b/sqilly.appspot.com/o/kura_1.jpg?alt=media&token=bb051e32-c25a-4a77-aa2b-e2bca6a8c5aa" alt={ supplement.name } className="responsive-img supplement-img" />
+                        <img src={ supplement.form === 1 ? PowderImage : PillsImage } alt={ supplement.name } className="supplement-img" />
                         </div>
                         <div className="col s4 l5">
                             <span className="supplement-name">{ supplement.name }</span>
@@ -196,7 +214,7 @@ class EditData extends Component {
             );
         }) : (
             <p>Brak dodanych suplementów</p>
-        );
+        );        
         return (
             <div className="wrapper">
                 <div className="row valign-wrapper edit-data-header">
@@ -205,7 +223,7 @@ class EditData extends Component {
                     </div>
                     <div className="col s6">
                         { 
-                            this.state.dataChanged && (<a href="#!" onClick={ this.handleSaveButton } className="btn waves-effect right">Zapisz</a>)
+                            this.state.dataChanged && (<button onClick={ this.handleSaveButton } className="btn waves-effect right pulse">Zapisz</button>)
                         }
                     </div>
                 </div>
@@ -215,8 +233,8 @@ class EditData extends Component {
                         <div className="card-panel">
                             <div className="row general-info-form valign-wrapper">                                                            
                                 <div className="col s12 xl6 center file-field input-field">
-                                    { this.state.image ? (
-                                            <img src={ this.state.image } alt="training" className="responsive-img profile-pic-img circle"/>
+                                    { this.state.imageUrl ? (
+                                            <img src={ this.state.imageUrl } alt="training" className="responsive-img profile-pic-img circle"/>
                                         ) : 
                                         (
                                             <i className="material-icons training-image-placeholder">add_a_photo</i>
@@ -301,13 +319,13 @@ function mapStateToProps(state) {
     return {
         user: state.firebase.profile,
         email: state.firebase.auth.email,
-        isLoading: state.user.isLoading
+        isLoading: state.user.isLoading,        
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        updateUserData: (data) => dispatch(updateUserData(data))
+        updateUserData: (data) => dispatch(updateUserData(data)),        
     }
 }
 

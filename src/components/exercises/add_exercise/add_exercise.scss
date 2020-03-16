@@ -1,0 +1,22 @@
+@import '../../../assets/styles/variables';
+
+.bullet-point-icon {
+    max-width: 24px;
+}
+
+.exercise-img { 
+    width: 275px !important;
+    height: 275px !important;
+    object-fit: cover;
+}
+
+.exercise-image-placeholder {
+    background-color: $medium-grey;
+    color: $accent-color;
+    padding: 135px;
+    border-radius: 200px;
+}
+
+.add-exercise-form {
+    flex-wrap: wrap;
+}
