@@ -17,6 +17,7 @@ class AddTraining extends Component {
         duration: '',
         description: '',
         difficulty: 0,
+        isPremium: false,
     }
     componentDidMount() {
         var chips = document.querySelectorAll('.chips-placeholder');        
@@ -117,7 +118,13 @@ class AddTraining extends Component {
                 this.setState({
                     difficulty: parseInt(e.target.value)
                 });
-                break;            
+                break;   
+            case 'isPremium':
+                console.log(e.target.value);
+                this.setState({
+                    isPremium: !this.state.isPremium
+                })
+                break;         
 
             default:                                  
                 break;
@@ -215,7 +222,13 @@ class AddTraining extends Component {
                                         <div className="col s12 input-field">
                                             <textarea id="training-description" className="materialize-textarea" onChange={ this.handleInputChange } value={ this.state.description }></textarea>
                                             <label htmlFor="training-description">Opis treningu</label>
-                                        </div>                                    
+                                        </div>
+                                        <div className="col s12">
+                                            <label>
+                                                <input id="isPremium" type="checkbox" className="filled-in" onChange={ this.handleInputChange } />
+                                                <span>Trening dla użytkowników premium</span>
+                                            </label>
+                                        </div>
                                     </div>                                        
                                 </div>
                                 

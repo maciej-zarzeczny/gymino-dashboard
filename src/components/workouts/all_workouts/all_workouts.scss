@@ -11,6 +11,24 @@
     font-weight: bold;
 }
 
+.workout-image {
+    max-height: 300px;
+    object-fit: cover;
+}
+
+.premium {
+    @include fontSize(13px);
+    position: absolute;
+    top: 5%;
+    left: 5%;
+    border: 1px solid $primary-color;
+    border-radius: 5px;
+    background-color: $primary-color;
+    color: white;
+    font-weight: bold;
+    padding: 5px 12px 5px 12px;
+}
+
 .training-card-name {
     @include fontSize(24px);
     color: $primary-color;

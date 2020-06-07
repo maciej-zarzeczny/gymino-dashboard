@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import './auth.scss';
-import Logo from '../../assets/images/dark_logo_web.png';
+import Logo from '../../assets/images/gymino_logo_dark.png';
 import { NavLink } from 'react-router-dom';
 import { signIn } from '../../redux/actions/auth_actions'
 import { connect } from 'react-redux'
@@ -17,7 +17,7 @@ class Login extends Component {
         if (email !== '' && password !== '') {
             this.props.signIn(this.state)
         } else {
-            alert('Podaj wszystkie dane')
+            alert('Wprowadź wszystkie dane')
         }
     }
     handleChange = (e) => {
@@ -35,22 +35,22 @@ class Login extends Component {
             </div>
         )
         const errorText = authError && (
-            <p className="help-text red-text darken-1">Logowanie nie powiodło się. Błędny email lub hasło</p>
+            <p className="help-text red-text darken-1">Logowanie nie powiodło się</p>
         )
         return (
             <div className="auth-page valign-wrapper">
-                <div className="container">                    
+                <div className="container">
                      <div className="row">
                          <div className="col s12 l6 center">
                              <img src={ Logo } alt="Sqilly logo" className="responsive-img logo-img" />
-                         </div>                     
+                         </div>
                      </div>
                      <div className="row">
                          <div className="col s12 l6">
                              <h4 className="auth-title">Logowanie</h4>
                              { errorText }
                          </div>
-                     </div>                     
+                     </div>
                      <div className="section"></div>                     
                      <form onSubmit={ this.handleSubmit }>
                         <div className="row no-bottom-margin">

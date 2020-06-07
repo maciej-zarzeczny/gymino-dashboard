@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink, withRouter } from 'react-router-dom';
-import logo from '../../../assets/images/light_logo_web.png';
+import logo from '../../../assets/images/gymino_logo_light.png';
 import "./menu.scss";
 import { signOut } from '../../../redux/actions/auth_actions'
 import { connect } from 'react-redux'
@@ -14,7 +14,7 @@ function Menu(props) {
             <ul className="sidenav sidenav-fixed" id="menu-sidenav">
                 <li className="center">
                     <NavLink to="/">
-                        <img src={ logo } alt="Sqilly logo" className="logo" />
+                        <img src={ logo } alt="Gymino logo" className="logo"/>
                     </NavLink>
                 </li>
                 <li>            

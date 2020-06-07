@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import './auth.scss';
-import Logo from '../../assets/images/dark_logo_web.png';
+import Logo from '../../assets/images/gymino_logo_dark.png';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux'
 import { signUp } from '../../redux/actions/auth_actions'

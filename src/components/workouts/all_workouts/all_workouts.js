@@ -22,10 +22,13 @@ class AllTrainings extends Component {
     }    
     render() {
         const { workouts, isLoading } = this.props;                           
-        const workoutsList = !isLoading ? workouts.length > 0 ? workouts.map((workout) => {            
+        const workoutsList = !isLoading ? workouts.length > 0 ? workouts.map((workout) => {
+            const premiumBadge = workout.isPremium && (
+                <div className="premium">PREMIUM</div>
+            )
             return (
                 <div className="col s12 xl4" key={ workout.id }>
-                    <div className="card large">
+                    <div className="card">
                         <div className="card-image">
                             <img src={ workout.image } alt={ workout.name } className="workout-image" />
                         </div>
@@ -36,7 +39,8 @@ class AllTrainings extends Component {
                         </div>
                         <div className="card-action">
                             <button onClick={ () => this.setState({ id: workout.id, imageName: workout.imageName }) } data-target="confirmation-modal" className="btn-small waves-effect red darken-1 modal-trigger"><i className="material-icons left">delete</i>Usuń</button>
-                        </div>
+                        </div>  
+                        { premiumBadge }
                     </div>
                 </div>
             )

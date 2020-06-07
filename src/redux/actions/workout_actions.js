@@ -20,6 +20,28 @@ export const getWorkouts = () => {
     }
 }
 
+export const getTopWorkouts = () => {
+    return (dispatch, getState, { getFirebase, getFirestore }) => {
+        dispatch({ type: 'START_WORKOUTS_REQUEST' })
+
+        const firestore = getFirestore();
+        const uid = getState().firebase.auth.uid;
+        
+        firestore.collection('trainers').doc(uid).collection('workouts').orderBy('amount', 'desc').limit(5).get().then((querySnapshot) => {
+            let topWorkouts = []
+            querySnapshot.forEach(doc => {
+                topWorkouts.push({
+                    ...doc.data(),
+                    id: doc.id
+                })
+            })
+            dispatch({ type: 'GET_TOP_WORKOUTS_SUCCESS', topWorkouts })
+        }).catch((err) => {
+            dispatch({ type: 'GET_TOP_WORKOUTS_ERROR', err })
+        })
+    }
+}
+
 export const createWorkout = (workout, ownProps) => {
     return (dispatch, getState, { getFirebase, getFirestore }) => {  
         dispatch({ type: 'START_WORKOUTS_REQUEST' })
@@ -97,6 +119,9 @@ export const deleteWorkout = (id, imageName) => {
         imageRef.delete().then(() => {
             return firestore.collection('trainers').doc(uid).collection('workouts').doc(id).delete()                
         }).then(() => {
+            const decrement = firestore.FieldValue.increment(-1);
+            firestore.collection('trainers').doc(uid).update({ numberOfWorkouts: decrement });
+
             dispatch({ type: 'DELETE_WORKOUT_SUCCESS', id })
         }).catch((err) => {            
             dispatch({ type: 'DELETE_WORKOUT_ERROR', err })

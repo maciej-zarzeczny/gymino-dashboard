@@ -2,7 +2,8 @@ const initState = {
     topWorkouts: [],
     workouts: [],
     workoutsLoaded: false,
-    isLoading: false,    
+    topWorkoutsLoaded: false,
+    isLoading: false,
 }
 
 const workoutReducer = (state = initState, action) => {
@@ -28,7 +29,21 @@ const workoutReducer = (state = initState, action) => {
             return {
                 ...state,
                 isLoading: false,
-            };            
+            };  
+            
+        case 'GET_TOP_WORKOUTS_SUCCESS':            
+            return {
+                ...state,
+                topWorkouts: action.topWorkouts,
+                isLoading: false,
+            }
+
+        case 'GET_TOP_WORKOUTS_ERROR':
+            alert('Błąd: ' + action.err.message)
+            return {
+                ...state,
+                isLoading: false,
+            }
 
         case 'CREATE_WORKOUT_SUCCESS':
             workouts = [...state.workouts, action.workout]

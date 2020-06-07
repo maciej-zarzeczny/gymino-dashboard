@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 class AddedExercise extends Component {
     state = {        
-        sets: [0],  
+        sets: [{ reps: 0, weight: 0 }],
         rest: 0,
         setRest: 0,
         setsVisible: true
@@ -13,10 +13,20 @@ class AddedExercise extends Component {
             sets
         });   
     }
-    updateSet = (e, index) => {
+    updateReps = (e, index) => {
         let sets = [...this.state.sets];
         let set = {...sets[index]};
-        set = e.target.value;
+        set.reps = e.target.value;
+
+        sets[index] = set;
+        this.setState({
+            sets
+        });
+    }
+    updateWeight = (e, index) => {
+        let sets = [...this.state.sets];
+        let set = {...sets[index]};
+        set.weight = e.target.value;
 
         sets[index] = set;
         this.setState({
@@ -50,28 +60,40 @@ class AddedExercise extends Component {
         if (isNaN(rest) || isNaN(setRest)) {
             error = true;
             alert('Błąd: Wprowadzone zostały niepoprawne wartości');
+            return;
         } else if (rest <= 0 || setRest <= 0) {
             error = true;
             alert('Błąd: Wprowadzne wartości muszą być większe od zera');
+            return;
         } else if (sets.length <= 0) {
             error = true;
             alert('Błąd: Należy dodać co najmniej jedną serię');
+            return;
         }
 
         for (let i = 0; i < sets.length; i++) {
-            const set = sets[i];
-            let numSet = parseInt(set);
+            const reps = parseInt(sets[i].reps);
+            var weight = parseInt(sets[i].weight);
 
-            if (isNaN(numSet)) {
+            if (isNaN(weight)) {
+                weight = 0;
+            }
+
+            if (isNaN(reps)) {
                 error = true;
-                alert('Błąd: Wprowadzone zostały niepoprawne wartości');
+                alert ('Błąd: Wprowadzone zostały niepoprawne wartości');
                 break;  
-            } else if (numSet <= 0) {
+            } else if (reps <= 0 || weight < 0) {
                 error = true;
-                alert('Błąd: Wprowadzne wartości muszą być większe od zera');
+                alert ('Błąd: Wprowadzne wartości muszą być większe od zera');
+                break;
+            } else if (weight > 100) {
+                error = true;
+                alert ('Błąd: Obciążenie nie może być większe niż 100%');
                 break;
             } else {
-                sets[i] = numSet;
+                sets[i].reps = reps;
+                sets[i].weight = weight;
             }            
         }
 
@@ -85,7 +107,7 @@ class AddedExercise extends Component {
     renderSets = () => {
         let setsToRender = '';
         this.state.sets.forEach(element => {
-            setsToRender += 'x' + element.toString() + ' ';
+            setsToRender += 'x' + element.reps.toString() + ' ';
         });
 
         return setsToRender;             
@@ -99,9 +121,13 @@ class AddedExercise extends Component {
                         <div className="col s3 l2 ">
                             <p>Seria { index + 1 }:</p>
                         </div>
-                        <div className="col s6 l4 input-field">
-                            <input type="number" id={ "reps-input-" + index } onChange={ (e) => this.updateSet(e, index) } value={ this.state.sets[index] } />
+                        <div className="col s3 l4 input-field">
+                            <input type="number" id={ "reps-input-" + index } onChange={ (e) => this.updateReps(e, index) } value={ this.state.sets[index].reps } />
                             <label className="active" htmlFor={ "reps-input-" + index }>Ilość powtórzeń</label>
+                        </div>
+                        <div className="col s3 l4 input-field">
+                            <input type="number" id={ "weight-input-" + index } onChange={ (e) => this.updateWeight(e, index) } value={ this.state.sets[index].weight } />
+                            <label className="active" htmlFor={ "weight-input-" + index }>Obciążenie (% 1RM)</label>
                         </div>
                         <div className="col s3 l2 center">
                             <a href="#!" onClick={ () => this.removeSet(index) }><i className="material-icons red-text darken-1">remove_circle_outline</i></a>
