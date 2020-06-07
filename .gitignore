@@ -13,6 +13,7 @@
 
 # API keys
 .env
+.firebase
 
 # misc
 .DS_Store
@@ -29,3 +30,4 @@ yarn-error.log*
 /src/assets/images/*
 
 /public/images/*
+/public/static/*
