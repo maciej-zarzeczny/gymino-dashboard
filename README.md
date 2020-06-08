@@ -2,8 +2,6 @@
 
 Dashboard lets user to sign up, add exercises and workouts as well as informations about supplements used by the user. Those informations are later displayed in mobile application available for android and iOS platforms. 
 
-![Demo of the application](sqilly_dashboard_demo.gif);
-
 ## Installation
 
 Clone the repository, install all dependencies and you are ready to go
