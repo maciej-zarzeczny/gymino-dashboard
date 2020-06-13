@@ -1,8 +1,8 @@
-# Sqilly dashboard
+# Gymino dashboard
 
 [Live demo](https://gymino.pl)
 
-Dashboard lets user to sign up, add exercises and workouts as well as informations about supplements used by the user. Those informations are later displayed in mobile application available for android and iOS platforms. 
+Gymino dashboard lets trainers to sign up, add exercises and workouts as well as informations about supplements used by the trainer. Those informations are later displayed in mobile application available for android and iOS platforms. 
 
 ## Installation
 
