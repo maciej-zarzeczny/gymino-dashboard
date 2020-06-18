@@ -2,7 +2,7 @@
 
 [Live demo](https://gymino.pl)
 
-**Test account credentials:  **
+**Test account credentials:**</br>
 **LOGIN:** test@account.com   
 **PASSWORD:** 111111   
 
