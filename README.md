@@ -2,6 +2,10 @@
 
 [Live demo](https://gymino.pl)
 
+Test account credentials: 
+LOGIN: test@account.com
+PASSWORD: 111111
+
 Gymino dashboard lets trainers to sign up, add exercises and workouts as well as informations about supplements used by the trainer. Those informations are later displayed in mobile application available for android and iOS platforms. 
 
 ## Installation
